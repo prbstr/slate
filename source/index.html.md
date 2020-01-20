@@ -97,6 +97,8 @@ Remember — an authenticated user is a happy user!
 
 # Preferences
 
+## Music and podcast preferences
+
 ```shell
 curl "http://example.com/api/preferences/type/music"
   -X GET 
