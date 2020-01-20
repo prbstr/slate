@@ -95,7 +95,7 @@ Device Info | {} | Information about the users device for analytics purposes.
 Remember — an authenticated user is a happy user!
 </aside>
 
-## Preferences
+# Preferences
 
 ```shell
 curl "http://example.com/api/preferences/type/music"
@@ -126,5 +126,6 @@ Parameter | Default | Description
 Type | All | A field representing what type of preferences should be returned. 
 
 <aside class="success">
-Is a secure call</aside>
+User must be logged in to access this API call
+</aside>
 
