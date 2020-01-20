@@ -22,10 +22,10 @@ Welcome to the Hush API! You can use our API to access Hush API endpoints, which
 
 Hush expects the session token to be included in most API requests to the server in an Authorization header that looks like the following:
 
-`Authorization: <token>`
+`Authorization: token`
 
 <aside class="notice">
-You must replace `<token>` with your token.
+You must replace "token" with your own token.
 </aside>
 
 # Login and registration
