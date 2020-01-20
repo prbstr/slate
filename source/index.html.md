@@ -20,24 +20,12 @@ Welcome to the Hush API! You can use our API to access Hush API endpoints, which
 
 # Authentication
 
-> To authorize, use this code:
+Hush expects the session token to be included in most API requests to the server in an Authorization header that looks like the following:
 
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Hush uses API keys to allow access to the API. You can request a new Hush API key be added to our [developer portal] here (http://add-link-here).
-
-Hush expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+`Authorization: <token>`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace `<token>` with your token.
 </aside>
 
 # Login and registration
@@ -72,10 +60,6 @@ Name | '' | A required field representing the users name.
 Email | '' | A required field representing the users email.
 Password | '' | A required field to secure the users account.
 Device Info | {} | Information about the users device for analytics purposes.
-
-<aside class="success">
-Remember — an authenticated user is a happy user!
-</aside>
 
 ## Existing user login
 
