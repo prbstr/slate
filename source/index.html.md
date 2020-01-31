@@ -20,12 +20,64 @@ Welcome to the Hush API! You can use our API to access Hush API endpoints, which
 
 # Authentication
 
-Hush expects the session token to be included in most API requests to the server in an Authorization header that looks like the following:
+Hush expects the id token to be included in most API requests to the server in an Authorization header that looks like the following:
 
-`Authorization: token`
+`Authorization: Bearer token`
 
 <aside class="notice">
-You must replace "token" with your own token.
+You must replace "token" with the token received from Firebase authentication.
+</aside>
+
+# Preferences
+
+## Music and podcast preferences
+
+```shell
+curl "http://example.com/api/preference"
+  -X GET 
+```
+> The above API call returns a list of all preferences in a JSON object like this:
+
+```json
+  [{"id":1,"type":1,"title":"News"},
+  {"id":2,"type":1,"title":"Sport"},
+  {"id":3,"type":2,"title":"Soul"},
+  {"id":4,"type":2,"title":"80s"},
+  {"id":5,"type":2,"title":"African"},
+  {"id":6,"type":2,"title":"Blues"}]
+```
+
+```shell
+curl "http://example.com/api/preference/type/music"
+  -X GET 
+```
+> The above API call returns a list of music preferences in a JSON object like this:
+
+```json
+  [{"id":1,"type":2,"title":"Pop"},
+  {"id":2,"type":2,"title":"Party"},
+  {"id":3,"type":2,"title":"Soul"},
+  {"id":4,"type":2,"title":"80s"},
+  {"id":5,"type":2,"title":"African"},
+  {"id":6,"type":2,"title":"Blues"}]
+```
+
+The preference end point returns all preferences, both music and podcast. Additionally, the endpoint that specifies a type returns a specific list of preferences that are either music or podcast.
+
+### HTTP Request
+
+`GET http://example.com/api/preferences` OR 
+`GET http://example.com/api/preferences/type/music` OR 
+`GET http://example.com/api/preferences/type/podcast`
+
+### Query Parameters
+
+Parameter | Default | Description
+--------- | ------- | -----------
+type | music | A field representing what type of preferences should be returned. 
+
+<aside class="success">
+The user does NOT have to be authenicated to make this call
 </aside>
 
 # Login and registration
@@ -33,33 +85,49 @@ You must replace "token" with your own token.
 ## New user registration
 
 ```shell
-curl "http://example.com/api/auth/registration"
+curl "http://example.com/api/user/save"
   -X POST 
-  -d "name=<name>&email=<mail_address>&password=<password>" 
+  -H "Authorization: Bearer <token>"
+  -d "auth_id=<uuid_from_firebase>"
+  -d "name=<name>"
+  -d "email=<mail_address>"
+  -d "password=<password>" 
+  -d "preferences= {
+    music: [23, 24, 34, 5],
+    podcast: [3, 4, 9, 33]
+  }"
 ```
-> The above command returns JSON structured like this:
+> If successfully registered:
+```
+Http Ok 200 with a response of true
+```
 
-```json
-{
-  "id_token": "<id_token>",
-  "session_token": "<session_token>"
-}
+> If registration failed because of an invalid user model:
+```
+Bad request 400 with a response of false
+```
+
+> If registration failed because of an invalid or expired token:
+```
+Unauthorized 401
 ```
 
 This endpoint registers a new user.
 
 ### HTTP Request
 
-`POST http://example.com/api/auth/registration`
+`POST http://example.com/api/user/save`
 
 ### Query Parameters
 
 Parameter | Default | Description
 --------- | ------- | -----------
-Name | '' | A required field representing the users name.
-Email | '' | A required field representing the users email.
-Password | '' | A required field to secure the users account.
-Device Info | {} | Information about the users device for analytics purposes.
+auth_id | '' | A required field representing the users firebase uuid
+name | '' | A required field representing the users name
+email | '' | A required field representing the users email
+password | '' | A required field to secure the users account
+preferences | { music: [], podcast: []} | A required field of at least two int id's in each array
+device_info | {} | Information about the users device for analytics purposes
 
 ## Existing user login
 
@@ -95,39 +163,24 @@ Device Info | {} | Information about the users device for analytics purposes.
 Remember — an authenticated user is a happy user!
 </aside>
 
-# Preferences
+# Home content
 
-## Music and podcast preferences
+## Intro
 
-```shell
-curl "http://example.com/api/preferences/type/music"
-  -X GET 
-```
-> The above command returns JSON structured like this:
+The home call occurs after a user has successfully registered both on firebase and in the hush database, or if the user is successfully logged in.
 
-```json
-  [{"id":1,"type":2,"title":"Pop"},
-  {"id":2,"type":2,"title":"Party"},
-  {"id":3,"type":2,"title":"Soul"},
-  {"id":4,"type":2,"title":"80s"},
-  {"id":5,"type":2,"title":"African"},
-  {"id":6,"type":2,"title":"Blues"}]
-```
+One call is made to the api, and the full response can be seen at "https://hush.primedia.co.za/Home/response.clean.json. Each section is discussed below
 
-This endpoint returns a list of preferences the user can choose from.
+## Trending
 
-### HTTP Request
+## Recent
 
-`GET http://example.com/api/preferences/type/music` OR 
-`GET http://example.com/api/preferences/type/podcast`
+## OnAir
 
-### Query Parameters
+## Radio
 
-Parameter | Default | Description
---------- | ------- | -----------
-Type | All | A field representing what type of preferences should be returned. 
+## Podcasts
 
-<aside class="success">
-User must be logged in to access this API call
-</aside>
+## CatchUp
 
+## Music
